@@ -37,6 +37,7 @@ public:
 
 
 //对于查找问题，完全可以使用hash，这里使用map之后，只需要遍历一次数组，对每个需要的补数，直接在hash中查找，整个程序复杂度为n
+//time 9ms
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
