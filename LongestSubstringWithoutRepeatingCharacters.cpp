@@ -59,7 +59,7 @@ public:
     }
 };
 
-//改进了代码结构，对遍历开头的控制应该放在工作函数外边，其次，每次找到重复之后，只需要从重复字符出现的那一点开始下次遍历，不需要从这次遍历的开始重启。
+//改进了代码结构，对遍历开头的控制应该放在工作函数外边，其次，每次找到重复之后，只需要从重复字符出现的那一点开始下次遍历，不需要从这次遍历的开始重启。（这个方法还有问题，即每次重新遍历，被遍历字符串再一次缩小为常度1，然后慢慢扩充，其实是没必要的）
 //time: 422ms
 class Solution {
 public:
@@ -103,3 +103,45 @@ public:
     }
         
 };
+
+
+
+//更快的写法，对于一个字符串或者数组相邻元素的扫描，可以使用滑动窗口，和上一个写法的思路类似，但是能减少很多重复的计算，因为当你发现一个重复时，说明重复的两个字符之间是没有重复的，这时候不需要吧扫描的窗口再次重置为1，而是可以保持窗口，仅仅把窗口的开始位置重置到重复字符第一次出现的地方就可以了。极大减少计算量
+//time:35ms
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        char* data=(char*)s.c_str();
+        int str_len=s.length();
+        int length=0;
+        int longest=0;
+        int begin=0,end=0;
+        map<char, int> lookup;
+        auto res=lookup.begin();
+        while((begin<str_len) && (end<str_len))
+        {
+            res=lookup.find(s[end]);
+            if(res==lookup.end())
+            {
+                lookup.insert(pair<char, int>(s[end], end));
+                end+=1;
+                length=(end-begin);
+            }
+            else
+            {
+                for(;begin<=(res->second);)
+                {
+                    lookup.erase(s[begin]);
+                    begin++;
+                }
+                if(length>longest)
+                    longest=length;
+            }
+        }
+        if(length>longest)
+            longest=length;
+        return longest;
+    }
+};
+
