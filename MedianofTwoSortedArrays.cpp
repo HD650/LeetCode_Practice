@@ -28,6 +28,8 @@ public:
         int len_b=nums2.size();
         if(len_b>len_a)
             return findMedianSortedArrays(nums2, nums1);
+        //对A序列和B序列都进行扩展，插入空缺位置，将N长度变为2N＋1，强制为奇数
+        //则同意了奇偶的逻辑
         int extend_len_a=(len_a*2+1);
         int extend_len_b=(len_b*2+1);
         int extend_len_half=(extend_len_a+extend_len_b)/2;
@@ -41,6 +43,7 @@ public:
         while((index2>=0)&&(index2<extend_len_b))
         {
             int index1=extend_len_half-index2-1;
+            //扩展之后，切面左边的字母原始坐标为(i-1)/2右边为i/2这里判断是为了防止越界
             L1=(index1==0)?(-MAX):nums1[(index1-1)/2];
             R1=((index1/2)>=len_a)?(MAX):nums1[index1/2];
             L2=(index2==0)?(-MAX):nums2[(index2-1)/2];
